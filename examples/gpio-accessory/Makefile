@@ -1,4 +1,4 @@
-PROGRAM = led
+PROGRAM = gpio-accessory
 
 EXTRA_COMPONENTS = \
 	extras/http-parser \
