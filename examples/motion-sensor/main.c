@@ -12,7 +12,7 @@
 #include <wifi_config.h>
 
 const int onboard_led_gpio = 2;
-const int sensor_pin = 12;
+const int sensor_pin = 16;
 
 void led_init() {
     gpio_enable(onboard_led_gpio, GPIO_OUTPUT);
