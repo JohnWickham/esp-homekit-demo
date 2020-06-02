@@ -3,7 +3,14 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <espressif/esp_wifi.h>
+#include <espressif/esp_sta.h>
 #include <esp/uart.h>
+#include <esp8266.h>
+#include <FreeRTOS.h>
+#include <task.h>
+#include <math.h>
 
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
