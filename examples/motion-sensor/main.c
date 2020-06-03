@@ -98,7 +98,7 @@ void user_init(void) {
     uart_set_baud(0, 115200);
 
     wifi_config_init2("Motion Sensor Setup", NULL, on_wifi_config_event);
-
+    led_init();
 
     if (toggle_create(sensor_pin, sensor_callback, NULL)) {
         identify_accessory();
