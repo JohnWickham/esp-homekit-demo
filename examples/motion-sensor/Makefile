@@ -1,4 +1,4 @@
-PROGRAM = occupancy
+PROGRAM = motion_sensor
 
 EXTRA_COMPONENTS = \
 	extras/http-parser \
