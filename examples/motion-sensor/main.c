@@ -47,7 +47,7 @@ void motion_sensor_callback(uint8_t gpio) {
     int new = gpio_read(sensor_gpio);
     motion_detected.value = HOMEKIT_BOOL(new);
     homekit_characteristic_notify(&motion_detected, HOMEKIT_BOOL(new));
-    gpio_write(led_gpio, on ? 0 : 1);
+    gpio_write(led_gpio, new);
 }
 
 void gpio_init() {
