@@ -21,7 +21,6 @@ void write(int pin, bool on) {
 void accessory_init() {
     gpio_enable(onboard_led_gpio, GPIO_OUTPUT);
     gpio_enable(accessory_gpio, GPIO_OUTPUT);
-    write(accessory_on);
 }
 
 void led_identify_task(void *_args) {
@@ -87,7 +86,8 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "481-51-623"
+    .password = "481-51-623",
+    .setup_code = ""
 };
 
 void on_wifi_ready() {
