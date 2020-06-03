@@ -60,7 +60,7 @@ void accessory_on_set(homekit_value_t value) {
 
 
 homekit_accessory_t *accessories[] = {
-    HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
+    HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_switch, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
             HOMEKIT_CHARACTERISTIC(NAME, "Side Table Accent Light"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "John Wickham"),
@@ -87,7 +87,7 @@ homekit_accessory_t *accessories[] = {
 homekit_server_config_t config = {
     .accessories = accessories,
     .password = "481-51-623",
-    .setup_code = ""
+    .setupId="1QJ8"
 };
 
 void on_wifi_ready() {
