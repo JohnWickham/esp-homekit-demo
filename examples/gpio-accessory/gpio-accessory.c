@@ -58,11 +58,12 @@ void accessory_on_set(homekit_value_t value) {
     write(accessory_gpio, accessory_on);
 }
 
+homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Switch");
 
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_switch, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
-            HOMEKIT_CHARACTERISTIC(NAME, "Side Table Accent Light"),
+            &name,
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "John Wickham"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20200601"),
             HOMEKIT_CHARACTERISTIC(MODEL, "Triumph 1–P"),
