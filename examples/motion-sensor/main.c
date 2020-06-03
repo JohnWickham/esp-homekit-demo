@@ -45,17 +45,13 @@ void identify(homekit_value_t _value) {
 homekit_characteristic_t motion_detected  = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, 0);
 
 void motion_sensor_callback(uint8_t gpio) {
-
-    if (gpio == MOTION_SENSOR_GPIO){
-        int new = 0;
-        new = gpio_read(MOTION_SENSOR_GPIO);
-        motion_detected.value = HOMEKIT_BOOL(new);
-        homekit_characteristic_notify(&motion_detected, HOMEKIT_BOOL(new));
-    }
-
+    int new = gpio_read(MOTION_SENSOR_GPIO);
+    motion_detected.value = HOMEKIT_BOOL(new);
+    homekit_characteristic_notify(&motion_detected, HOMEKIT_BOOL(new));
 }
 
 void gpio_init() {
+    gpio_enable(led_gpio, GPIO_OUTPUT);
 
     gpio_enable(MOTION_SENSOR_GPIO, GPIO_INPUT);
     gpio_set_pullup(MOTION_SENSOR_GPIO, false, false);
