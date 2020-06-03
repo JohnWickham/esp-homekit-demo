@@ -92,8 +92,6 @@ homekit_server_config_t config = {
 };
 
 void on_wifi_ready() {
-    gpio_init();
-    homekit_server_init(&config);
 }
 
 void create_accessory_name() {
@@ -110,6 +108,10 @@ void create_accessory_name() {
 void user_init(void) {
     uart_set_baud(0, 115200);
     gpio_init();
+    
     create_accessory_name();
     wifi_config_init2("Motion Sensor Setup", NULL, on_wifi_ready);
+   
+    gpio_init();
+    homekit_server_init(&config);
 }
