@@ -97,6 +97,6 @@ void on_wifi_ready() {
 void user_init(void) {
     uart_set_baud(0, 115200);
 
-    wifi_config_init("my-accessory", NULL, on_wifi_ready);
+    wifi_config_init("Accessory Setup", NULL, on_wifi_ready);
     accessory_init();
 }
