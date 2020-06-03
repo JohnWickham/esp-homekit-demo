@@ -47,11 +47,7 @@ homekit_characteristic_t motion_detected = HOMEKIT_CHARACTERISTIC_(MOTION_DETECT
 void sensor_callback(bool state, void *context) {
     motion_detected.value = HOMEKIT_UINT8(state ? 1 : 0);
     homekit_characteristic_notify(&motion_detected, motion_detected.value);
-
-    vTaskDelay(3000 / portTICK_PERIOD_MS);
-
-    motion_detected.value = HOMEKIT_UINT8(0);
-    homekit_characteristic_notify(&motion_detected, motion_detected.value);
+    gpio_write(onboard_led_gpio, state ? 1 : 0);
 }
 
 homekit_accessory_t *accessories[] = {
