@@ -2,6 +2,8 @@ PROGRAM = gpio-accessory
 
 EXTRA_COMPONENTS = \
 	extras/http-parser \
+	extras/dhcpserver \
+	$(abspath ../../components/esp8266-open-rtos/wifi_config) \
 	$(abspath ../../components/esp8266-open-rtos/cJSON) \
 	$(abspath ../../components/common/wolfssl) \
 	$(abspath ../../components/common/homekit)
