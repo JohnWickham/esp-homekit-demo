@@ -13,8 +13,7 @@
 #include <wifi_config.h>
 
 const int led_gpio = 2;
-
-#define MOTION_SENSOR_GPIO 14
+const int sensor_gpio 14;
 
 void led_write(bool on) {
     gpio_write(led_gpio, on ? 0 : 1);
@@ -45,17 +44,18 @@ void identify(homekit_value_t _value) {
 homekit_characteristic_t motion_detected  = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, 0);
 
 void motion_sensor_callback(uint8_t gpio) {
-    int new = gpio_read(MOTION_SENSOR_GPIO);
+    int new = gpio_read(sensor_gpio);
     motion_detected.value = HOMEKIT_BOOL(new);
     homekit_characteristic_notify(&motion_detected, HOMEKIT_BOOL(new));
+    gpio_write(led_gpio, on ? 0 : 1);
 }
 
 void gpio_init() {
     gpio_enable(led_gpio, GPIO_OUTPUT);
 
-    gpio_enable(MOTION_SENSOR_GPIO, GPIO_INPUT);
-    gpio_set_pullup(MOTION_SENSOR_GPIO, false, false);
-    gpio_set_interrupt(MOTION_SENSOR_GPIO, GPIO_INTTYPE_EDGE_ANY, motion_sensor_callback);
+    gpio_enable(sensor_gpio, GPIO_INPUT);
+    gpio_set_pullup(sensor_gpio, false, false);
+    gpio_set_interrupt(sensor_gpio, GPIO_INTTYPE_EDGE_ANY, motion_sensor_callback);
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Motion Sensor");
