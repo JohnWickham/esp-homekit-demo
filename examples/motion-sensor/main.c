@@ -74,7 +74,8 @@ homekit_accessory_t *accessories[] = {
 static bool homekit_initialized = false;
 static homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "481-51-623"
+    .password = "481-51-623",
+    .setupId="1QJ8"
 };
 
 
