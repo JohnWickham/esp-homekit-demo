@@ -13,7 +13,7 @@
 #include <wifi_config.h>
 
 const int led_gpio = 2;
-const int sensor_gpio 14;
+const int sensor_gpio = 14;
 
 void led_write(bool on) {
     gpio_write(led_gpio, on ? 0 : 1);
