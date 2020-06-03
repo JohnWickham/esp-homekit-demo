@@ -94,9 +94,21 @@ void on_wifi_ready() {
     homekit_server_init(&config);
 }
 
+void create_accessory_name() {
+    uint8_t macaddr[6];
+    sdk_wifi_get_macaddr(STATION_IF, macaddr);
+
+    int name_len = snprintf(NULL, 0, "Switch %02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
+    char *name_value = malloc(name_len+1);
+    snprintf(name_value, name_len+1, "Switch %02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
+
+    name.value = HOMEKIT_STRING(name_value);
+}
+
 void user_init(void) {
     uart_set_baud(0, 115200);
 
-    wifi_config_init("Accessory Setup", NULL, on_wifi_ready);
+    create_accessory_name();
+    wifi_config_init2("Accessory Setup", NULL, on_wifi_ready);
     accessory_init();
 }
