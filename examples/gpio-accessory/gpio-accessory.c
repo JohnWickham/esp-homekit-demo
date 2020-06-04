@@ -44,19 +44,6 @@ void accessory_identify(homekit_value_t _value) {
     xTaskCreate(accessory_identify_task, "LED identify", 128, NULL, 2, NULL);
 }
 
-// homekit_value_t accessory_on_get() {
-//     return HOMEKIT_BOOL(accessory_on);
-// }
-
-// void accessory_on_set(homekit_value_t value) {
-//     if (value.format != homekit_format_bool) {
-//         printf("Invalid value format: %d\n", value.format);
-//         return;
-//     }
-
-//     accessory_on = value.bool_value;
-//     write(accessory_gpio, accessory_on);
-// }
 void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
     gpio_write(accessory_gpio, accessory_on.value.bool_value);
 }
