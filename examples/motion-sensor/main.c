@@ -15,24 +15,20 @@
 const int led_gpio = 2;
 const int sensor_gpio = 14;
 
-void led_write(bool on) {
-    gpio_write(led_gpio, on ? 0 : 1);
-}
-
 void identify_task(void *_args) {
     // We identify the `Motion Sensor` by Flashing it's LED.
     for (int i=0; i<3; i++) {
         for (int j=0; j<2; j++) {
-            led_write(true);
+            gpio_write(led_gpio, true);
             vTaskDelay(100 / portTICK_PERIOD_MS);
-            led_write(false);
+            gpio_write(led_gpio, false);
             vTaskDelay(100 / portTICK_PERIOD_MS);
         }
 
         vTaskDelay(250 / portTICK_PERIOD_MS);
     }
 
-    led_write(false);
+    led_write(led_gpio, false);
 
     vTaskDelete(NULL);
 }
@@ -106,8 +102,7 @@ void user_init(void) {
     gpio_init();
     
     create_accessory_name();
-    wifi_config_init2("Motion Sensor Setup", NULL, on_wifi_ready);
+    wifi_config_init("Motion Sensor Setup", NULL, on_wifi_ready);
    
-    gpio_init();
     homekit_server_init(&config);
 }
