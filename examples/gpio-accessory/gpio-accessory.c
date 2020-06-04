@@ -71,7 +71,7 @@ homekit_accessory_t *accessories[] = {
             HOMEKIT_CHARACTERISTIC(IDENTIFY, led_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]){
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]){
             HOMEKIT_CHARACTERISTIC(NAME, "Accent Light"),
             HOMEKIT_CHARACTERISTIC(
                 ON, false,
