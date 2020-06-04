@@ -22,19 +22,19 @@
 
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
-#include "wifi.h"
+#include <wifi_config.h>
 #include "ws2812_i2s/ws2812_i2s.h"
 
-#define LED_ON 0                // this is the value to write to GPIO for led on (0 = GPIO low)
+#define accessory_on 0                // this is the value to write to GPIO for led on (0 = GPIO low)
 #define LED_INBUILT_GPIO 2      // this is the onboard LED used to show on/off only
-#define LED_COUNT 16            // this is the number of WS2812B leds on the strip
+#define LED_COUNT 12            // this is the number of WS2812B leds on the strip
 #define LED_RGB_SCALE 255       // this is the scaling factor used for color conversion
 
 // Global variables
 float led_hue = 0;              // hue is scaled 0 to 360
 float led_saturation = 59;      // saturation is scaled 0 to 100
 float led_brightness = 100;     // brightness is scaled 0 to 100
-bool led_on = false;            // on is boolean on or off
+bool accessory_on = false;            // on is boolean on or off
 ws2812_pixel_t pixels[LED_COUNT];
 
 //http://blog.saikoled.com/post/44677718712/how-to-convert-from-hsi-to-rgb-white
@@ -86,18 +86,18 @@ void led_string_fill(ws2812_pixel_t rgb) {
 void led_string_set(void) {
     ws2812_pixel_t rgb = { { 0, 0, 0, 0 } };
 
-    if (led_on) {
+    if (accessory_on) {
         // convert HSI to RGBW
         hsi2rgb(led_hue, led_saturation, led_brightness, &rgb);
         //printf("h=%d,s=%d,b=%d => ", (int)led_hue, (int)led_saturation, (int)led_brightness);
         //printf("r=%d,g=%d,b=%d,w=%d\n", rgbw.red, rgbw.green, rgbw.blue, rgbw.white);
 
         // set the inbuilt led
-        gpio_write(LED_INBUILT_GPIO, LED_ON);
+        gpio_write(LED_INBUILT_GPIO, accessory_on);
     }
     else {
         // printf("off\n");
-        gpio_write(LED_INBUILT_GPIO, 1 - LED_ON);
+        gpio_write(LED_INBUILT_GPIO, 1 - accessory_on);
     }
 
     // write out the new color 
@@ -126,16 +126,16 @@ void led_init() {
     led_string_set();
 }
 
-void led_identify_task(void *_args) {
+void identify_accessory_task(void *_args) {
     const ws2812_pixel_t COLOR_PINK = { { 255, 0, 127, 0 } };
     const ws2812_pixel_t COLOR_BLACK = { { 0, 0, 0, 0 } };
 
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            gpio_write(LED_INBUILT_GPIO, LED_ON);
+            gpio_write(LED_INBUILT_GPIO, accessory_on);
             led_string_fill(COLOR_PINK);
             vTaskDelay(100 / portTICK_PERIOD_MS);
-            gpio_write(LED_INBUILT_GPIO, 1 - LED_ON);
+            gpio_write(LED_INBUILT_GPIO, 1 - accessory_on);
             led_string_fill(COLOR_BLACK);
             vTaskDelay(100 / portTICK_PERIOD_MS);
         }
@@ -146,22 +146,22 @@ void led_identify_task(void *_args) {
     vTaskDelete(NULL);
 }
 
-void led_identify(homekit_value_t _value) {
+void identify_accessory(homekit_value_t _value) {
     // printf("LED identify\n");
-    xTaskCreate(led_identify_task, "LED identify", 128, NULL, 2, NULL);
+    xTaskCreate(identify_accessory_task, "Identify", 128, NULL, 2, NULL);
 }
 
-homekit_value_t led_on_get() {
-    return HOMEKIT_BOOL(led_on);
+homekit_value_t accessory_on_get() {
+    return HOMEKIT_BOOL(accessory_on);
 }
 
-void led_on_set(homekit_value_t value) {
+void accessory_on_set(homekit_value_t value) {
     if (value.format != homekit_format_bool) {
         // printf("Invalid on-value format: %d\n", value.format);
         return;
     }
 
-    led_on = value.bool_value;
+    accessory_on = value.bool_value;
     led_string_set();
 }
 
@@ -203,25 +203,25 @@ void led_saturation_set(homekit_value_t value) {
     led_string_set();
 }
 
-homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Sample LED Strip");
+homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Color LED Bulb");
 
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id = 1, .category = homekit_accessory_category_lightbulb, .services = (homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics = (homekit_characteristic_t*[]) {
             &name,
-            HOMEKIT_CHARACTERISTIC(MANUFACTURER, "Generic"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "037A2BABF19D"),
-            HOMEKIT_CHARACTERISTIC(MODEL, "LEDStrip"),
-            HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.1"),
-            HOMEKIT_CHARACTERISTIC(IDENTIFY, led_identify),
+            HOMEKIT_CHARACTERISTIC(MANUFACTURER, "John Wickham"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20200604"),
+            HOMEKIT_CHARACTERISTIC(MODEL, "Color LED Bulb"),
+            HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0"),
+            HOMEKIT_CHARACTERISTIC(IDENTIFY, identify_accessory),
             NULL
         }),
         HOMEKIT_SERVICE(LIGHTBULB, .primary = true, .characteristics = (homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Sample LED Strip"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Color LED Blub"),
             HOMEKIT_CHARACTERISTIC(
                 ON, true,
-                .getter = led_on_get,
-                .setter = led_on_set
+                .getter = accessory_on_get,
+                .setter = accessory_on_set
             ),
             HOMEKIT_CHARACTERISTIC(
                 BRIGHTNESS, 100,
@@ -247,23 +247,26 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "111-11-111"
+    .password = "481-51-623",
+    .setupId = "6PB5"
 };
 
-void user_init(void) {
-    // uart_set_baud(0, 115200);
-
-    // This example shows how to use same firmware for multiple similar accessories
-    // without name conflicts. It uses the last 3 bytes of accessory's MAC address as
-    // accessory name suffix.
+void create_accessory_name() {
     uint8_t macaddr[6];
     sdk_wifi_get_macaddr(STATION_IF, macaddr);
     int name_len = snprintf(NULL, 0, "Sample LED Strip-%02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
     char *name_value = malloc(name_len + 1);
     snprintf(name_value, name_len + 1, "Sample LED Strip-%02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
     name.value = HOMEKIT_STRING(name_value);
+}
 
-    wifi_init();
-    led_init();
+void on_wifi_ready() {
     homekit_server_init(&config);
+}
+
+void user_init(void) {
+    uart_set_baud(0, 115200);
+    accessory_init();
+    create_accessory_name();
+    wifi_config_init("Accessory Setup", NULL, on_wifi_ready);
 }
