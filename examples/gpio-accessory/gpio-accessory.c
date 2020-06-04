@@ -12,7 +12,6 @@
 
 const int accessory_gpio = 12;
 const int onboard_led_gpio = 2;
-bool accessory_on = false;
 
 void accessory_init() {
     gpio_enable(onboard_led_gpio, GPIO_OUTPUT);
@@ -31,7 +30,7 @@ void accessory_identify_task(void *_args) {
         vTaskDelay(250 / portTICK_PERIOD_MS);
     }
 
-    gpio_write(onboard_led_gpio, accessory_on);
+    gpio_write(onboard_led_gpio, accessory_on.value.bool_value);
 
     vTaskDelete(NULL);
 }
