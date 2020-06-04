@@ -91,11 +91,6 @@ homekit_server_config_t config = {
     .setupId="4GF7"
 };
 
-void on_wifi_ready() {
-    create_accessory_name();
-    homekit_server_init(&config);
-}
-
 void create_accessory_name() {
     uint8_t macaddr[6];
     sdk_wifi_get_macaddr(STATION_IF, macaddr);
@@ -105,6 +100,11 @@ void create_accessory_name() {
     snprintf(name_value, name_len+1, "Switch %02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
 
     name.value = HOMEKIT_STRING(name_value);
+}
+
+void on_wifi_ready() {
+    create_accessory_name();
+    homekit_server_init(&config);
 }
 
 void user_init(void) {
