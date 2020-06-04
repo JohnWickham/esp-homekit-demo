@@ -20,7 +20,7 @@ void write(int pin, bool on) {
 
 void accessory_init() {
     gpio_enable(onboard_led_gpio, GPIO_OUTPUT);
-    gpio_enable(accessory_gpio, GPIO_OUTPUT);
+    gpio_enable(accessory_gpio, GPIO_OUTPUT);   
 }
 
 void led_identify_task(void *_args) {
