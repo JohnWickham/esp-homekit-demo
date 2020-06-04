@@ -22,7 +22,7 @@
 
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
-#include "wifi.h"
+#include <wifi_config.h>
 #include "ws2812_i2s/ws2812_i2s.h"
 
 #define LED_ON 0                // this is the value to write to GPIO for led on (0 = GPIO low)
@@ -250,20 +250,22 @@ homekit_server_config_t config = {
     .password = "111-11-111"
 };
 
-void user_init(void) {
-    // uart_set_baud(0, 115200);
-
-    // This example shows how to use same firmware for multiple similar accessories
-    // without name conflicts. It uses the last 3 bytes of accessory's MAC address as
-    // accessory name suffix.
+void create_accessory_name() {
     uint8_t macaddr[6];
     sdk_wifi_get_macaddr(STATION_IF, macaddr);
     int name_len = snprintf(NULL, 0, "Sample LED Strip-%02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
     char *name_value = malloc(name_len + 1);
     snprintf(name_value, name_len + 1, "Sample LED Strip-%02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
     name.value = HOMEKIT_STRING(name_value);
+}
 
-    wifi_init();
-    led_init();
+void on_wifi_ready() {
     homekit_server_init(&config);
+}
+
+void user_init(void) {
+    uart_set_baud(0, 115200);
+    led_init();
+    create_accessory_name();
+    wifi_config_init("Accessory Setup", NULL, on_wifi_ready);
 }
