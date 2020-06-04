@@ -13,12 +13,9 @@
 const int accessory_gpio = 12;
 const int onboard_led_gpio = 2;
 
-void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
-    gpio_write(accessory_on.value.bool_value);
-}
-
+void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context);
 homekit_characteristic_t accessory_on = HOMEKIT_CHARACTERISTIC_(
-    ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)
+    ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(accessory_on_callback)
 );
 
 void accessory_init() {
@@ -60,6 +57,9 @@ void accessory_identify(homekit_value_t _value) {
 //     accessory_on = value.bool_value;
 //     write(accessory_gpio, accessory_on);
 // }
+void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
+    gpio_write(accessory_on.value.bool_value);
+}
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Switch");
 
