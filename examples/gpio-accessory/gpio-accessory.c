@@ -13,6 +13,10 @@
 const int accessory_gpio = 12;
 const int onboard_led_gpio = 2;
 
+void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
+    gpio_write(accessory_on.value.bool_value);
+}
+
 homekit_characteristic_t accessory_on = HOMEKIT_CHARACTERISTIC_(
     ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)
 );
@@ -41,10 +45,6 @@ void accessory_identify_task(void *_args) {
 
 void accessory_identify(homekit_value_t _value) {
     xTaskCreate(accessory_identify_task, "LED identify", 128, NULL, 2, NULL);
-}
-
-void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
-    gpio_write(accessory_on.value.bool_value);
 }
 
 // homekit_value_t accessory_on_get() {
