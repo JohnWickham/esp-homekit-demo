@@ -25,17 +25,17 @@
 #include <wifi_config.h>
 #include "ws2812_i2s/ws2812_i2s.h"
 
-#define accessory_on 0                // this is the value to write to GPIO for led on (0 = GPIO low)
-#define LED_INBUILT_GPIO 2      // this is the onboard LED used to show on/off only
-#define LED_COUNT 12            // this is the number of WS2812B leds on the strip
-#define LED_RGB_SCALE 255       // this is the scaling factor used for color conversion
+int accessory_on 0                // this is the value to write to GPIO for led on (0 = GPIO low)
+const int onboard_led_gpio 2      // this is the onboard LED used to show on/off only
+const int led_count 12            // this is the number of WS2812B leds on the strip
+const int led_rgb_scale 255       // this is the scaling factor used for color conversion
 
 // Global variables
 float led_hue = 0;              // hue is scaled 0 to 360
 float led_saturation = 59;      // saturation is scaled 0 to 100
 float led_brightness = 100;     // brightness is scaled 0 to 100
 bool accessory_on = false;            // on is boolean on or off
-ws2812_pixel_t pixels[LED_COUNT];
+ws2812_pixel_t pixels[led_count];
 
 //http://blog.saikoled.com/post/44677718712/how-to-convert-from-hsi-to-rgb-white
 static void hsi2rgb(float h, float s, float i, ws2812_pixel_t* rgb) {
@@ -51,21 +51,21 @@ static void hsi2rgb(float h, float s, float i, ws2812_pixel_t* rgb) {
     i = i * sqrt(i);                    // shape intensity to have finer granularity near 0
 
     if (h < 2.09439) {
-        r = LED_RGB_SCALE * i / 3 * (1 + s * cos(h) / cos(1.047196667 - h));
-        g = LED_RGB_SCALE * i / 3 * (1 + s * (1 - cos(h) / cos(1.047196667 - h)));
-        b = LED_RGB_SCALE * i / 3 * (1 - s);
+        r = led_rgb_scale * i / 3 * (1 + s * cos(h) / cos(1.047196667 - h));
+        g = led_rgb_scale * i / 3 * (1 + s * (1 - cos(h) / cos(1.047196667 - h)));
+        b = led_rgb_scale * i / 3 * (1 - s);
     }
     else if (h < 4.188787) {
         h = h - 2.09439;
-        g = LED_RGB_SCALE * i / 3 * (1 + s * cos(h) / cos(1.047196667 - h));
-        b = LED_RGB_SCALE * i / 3 * (1 + s * (1 - cos(h) / cos(1.047196667 - h)));
-        r = LED_RGB_SCALE * i / 3 * (1 - s);
+        g = led_rgb_scale * i / 3 * (1 + s * cos(h) / cos(1.047196667 - h));
+        b = led_rgb_scale * i / 3 * (1 + s * (1 - cos(h) / cos(1.047196667 - h)));
+        r = led_rgb_scale * i / 3 * (1 - s);
     }
     else {
         h = h - 4.188787;
-        b = LED_RGB_SCALE * i / 3 * (1 + s * cos(h) / cos(1.047196667 - h));
-        r = LED_RGB_SCALE * i / 3 * (1 + s * (1 - cos(h) / cos(1.047196667 - h)));
-        g = LED_RGB_SCALE * i / 3 * (1 - s);
+        b = led_rgb_scale * i / 3 * (1 + s * cos(h) / cos(1.047196667 - h));
+        r = led_rgb_scale * i / 3 * (1 + s * (1 - cos(h) / cos(1.047196667 - h)));
+        g = led_rgb_scale * i / 3 * (1 - s);
     }
 
     rgb->red = (uint8_t) r;
@@ -77,7 +77,7 @@ static void hsi2rgb(float h, float s, float i, ws2812_pixel_t* rgb) {
 void led_string_fill(ws2812_pixel_t rgb) {
 
     // write out the new color to each pixel
-    for (int i = 0; i < LED_COUNT; i++) {
+    for (int i = 0; i < led_count; i++) {
         pixels[i] = rgb;
     }
     ws2812_i2s_update(pixels, PIXEL_RGB);
@@ -93,34 +93,23 @@ void led_string_set(void) {
         //printf("r=%d,g=%d,b=%d,w=%d\n", rgbw.red, rgbw.green, rgbw.blue, rgbw.white);
 
         // set the inbuilt led
-        gpio_write(LED_INBUILT_GPIO, accessory_on);
+        gpio_write(onboard_led_gpio, accessory_on);
     }
     else {
         // printf("off\n");
-        gpio_write(LED_INBUILT_GPIO, 1 - accessory_on);
+        gpio_write(onboard_led_gpio, 1 - accessory_on);
     }
 
     // write out the new color 
     led_string_fill(rgb);
 }
 
-static void wifi_init() {
-    struct sdk_station_config wifi_config = {
-        .ssid = WIFI_SSID,
-        .password = WIFI_PASSWORD,
-    };
-
-    sdk_wifi_set_opmode(STATION_MODE);
-    sdk_wifi_station_set_config(&wifi_config);
-    sdk_wifi_station_connect();
-}
-
-void led_init() {
+void accessory_init() {
     // initialise the onboard led as a secondary indicator (handy for testing)
-    gpio_enable(LED_INBUILT_GPIO, GPIO_OUTPUT);
+    gpio_enable(onboard_led_gpio, GPIO_OUTPUT);
 
     // initialise the LED strip
-    ws2812_i2s_init(LED_COUNT, PIXEL_RGB);
+    ws2812_i2s_init(led_count, PIXEL_RGB);
 
     // set the initial state
     led_string_set();
@@ -132,10 +121,10 @@ void identify_accessory_task(void *_args) {
 
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            gpio_write(LED_INBUILT_GPIO, accessory_on);
+            gpio_write(onboard_led_gpio, accessory_on);
             led_string_fill(COLOR_PINK);
             vTaskDelay(100 / portTICK_PERIOD_MS);
-            gpio_write(LED_INBUILT_GPIO, 1 - accessory_on);
+            gpio_write(onboard_led_gpio, 1 - accessory_on);
             led_string_fill(COLOR_BLACK);
             vTaskDelay(100 / portTICK_PERIOD_MS);
         }
