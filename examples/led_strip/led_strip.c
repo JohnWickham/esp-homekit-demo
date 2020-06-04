@@ -104,17 +104,6 @@ void led_string_set(void) {
     led_string_fill(rgb);
 }
 
-static void wifi_init() {
-    struct sdk_station_config wifi_config = {
-        .ssid = WIFI_SSID,
-        .password = WIFI_PASSWORD,
-    };
-
-    sdk_wifi_set_opmode(STATION_MODE);
-    sdk_wifi_station_set_config(&wifi_config);
-    sdk_wifi_station_connect();
-}
-
 void led_init() {
     // initialise the onboard led as a secondary indicator (handy for testing)
     gpio_enable(LED_INBUILT_GPIO, GPIO_OUTPUT);
