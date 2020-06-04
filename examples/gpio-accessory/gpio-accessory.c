@@ -58,7 +58,7 @@ void accessory_identify(homekit_value_t _value) {
 //     write(accessory_gpio, accessory_on);
 // }
 void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
-    gpio_write(accessory_on.value.bool_value);
+    gpio_write(accessory_gpio, accessory_on.value.bool_value);
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Switch");
