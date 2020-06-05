@@ -84,6 +84,7 @@ homekit_server_config_t config = {
 };
 
 void on_wifi_ready() {
+    homekit_server_init(&config);
 }
 
 void create_accessory_name() {
@@ -103,6 +104,4 @@ void user_init(void) {
     
     create_accessory_name();
     wifi_config_init("Motion Sensor Setup", NULL, on_wifi_ready);
-   
-    homekit_server_init(&config);
 }
