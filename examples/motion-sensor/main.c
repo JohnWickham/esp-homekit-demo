@@ -44,14 +44,6 @@ void sensor_callback(bool high, void *context) {
     homekit_characteristic_notify(&motion_detected, motion_detected.value);
 }
 
-void gpio_init() {
-    gpio_enable(led_gpio, GPIO_OUTPUT);
-
-    if (toggle_create(sensor_gpio, sensor_callback, NULL)) {
-        gpio_write(led_gpio, false);
-    }
-}
-
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Motion Sensor");
 
 homekit_accessory_t *accessories[] = {
@@ -82,7 +74,10 @@ homekit_server_config_t config = {
 };
 
 void on_wifi_ready() {
-    homekit_server_init(&config);
+    if (toggle_create(sensor_gpio, sensor_callback, NULL)) {
+        homekit_server_init(&config);
+        gpio_write(led_gpio, false);
+    }
 }
 
 void create_accessory_name() {
@@ -98,7 +93,7 @@ void create_accessory_name() {
 
 void user_init(void) {
     uart_set_baud(0, 115200);
-    gpio_init();
+    gpio_enable(led_gpio, GPIO_OUTPUT);
     
     create_accessory_name();
     wifi_config_init("Motion Sensor Setup", NULL, on_wifi_ready);
