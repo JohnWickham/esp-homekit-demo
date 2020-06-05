@@ -5,7 +5,6 @@ EXTRA_COMPONENTS = \
 	extras/dhcpserver \
 	$(abspath ../../components/esp8266-open-rtos/cJSON) \
 	$(abspath ../../components/esp8266-open-rtos/wifi_config) \
-	$(abspath ../../components/common/button) \
 	$(abspath ../../components/common/wolfssl) \
 	$(abspath ../../components/common/homekit)
 
