@@ -28,7 +28,7 @@ void identify_task(void *_args) {
         vTaskDelay(250 / portTICK_PERIOD_MS);
     }
 
-    led_write(led_gpio, false);
+    gpio_write(led_gpio, false);
 
     vTaskDelete(NULL);
 }
