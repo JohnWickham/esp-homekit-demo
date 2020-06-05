@@ -48,10 +48,14 @@ void motion_sensor_callback(uint8_t gpio) {
 
 void gpio_init() {
     gpio_enable(led_gpio, GPIO_OUTPUT);
+    gpio_write(led_gpio, false);
 
-    gpio_enable(sensor_gpio, GPIO_INPUT);
-    gpio_set_pullup(sensor_gpio, false, false);
-    gpio_set_interrupt(sensor_gpio, GPIO_INTTYPE_EDGE_ANY, motion_sensor_callback);
+    // gpio_enable(sensor_gpio, GPIO_INPUT);
+    // gpio_set_pullup(sensor_gpio, false, false);
+    // gpio_set_interrupt(sensor_gpio, GPIO_INTTYPE_EDGE_ANY, motion_sensor_callback);
+    if (toggle_create(sensor_gpio, motion_sensor_callback, NULL)) {
+        identify_task();
+    }
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Motion Sensor");
