@@ -96,7 +96,7 @@ homekit_server_config_t config = {
 
 button_config_t sensor_config = {
     .active_level = button_active_high
-}
+};
 
 void on_wifi_ready() {
 
