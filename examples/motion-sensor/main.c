@@ -59,7 +59,7 @@ void identify_error() {
 homekit_characteristic_t motion_detected  = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, 0);
 
 void sensor_callback(uint8_t gpio) {
-    int new = bool(gpio_read(sensor_gpio));
+    bool new = gpio_read(sensor_gpio);
     motion_detected.value = HOMEKIT_BOOL(!new);
     homekit_characteristic_notify(&motion_detected, motion_detected.value);
     gpio_write(led_gpio, !new);
