@@ -8,6 +8,7 @@
 #include <queue.h>
 #include <string.h>
 
+#include <toggle.h>
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
 #include <wifi_config.h>
@@ -54,7 +55,7 @@ void gpio_init() {
     // gpio_set_pullup(sensor_gpio, false, false);
     // gpio_set_interrupt(sensor_gpio, GPIO_INTTYPE_EDGE_ANY, motion_sensor_callback);
     if (toggle_create(sensor_gpio, motion_sensor_callback, NULL)) {
-        identify_task();
+        identify_task(NULL);
     }
 }
 
