@@ -60,7 +60,7 @@ void identify_error() {
 
 homekit_characteristic_t motion_detected  = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, 0);
 
-void sensor_callback(button_event_t event, void *context) {
+void sensor_callback(bool high, void *context) {
     motion_detected.value = HOMEKIT_UINT8(high ? 1 : 0);
     homekit_characteristic_notify(&motion_detected, motion_detected.value);
 }
@@ -94,13 +94,9 @@ homekit_server_config_t config = {
     .setupId="1QJ8"
 };
 
-button_config_t sensor_config = {
-    .active_level = button_active_high
-};
-
 void on_wifi_ready() {
 
-    if (button_create(sensor_gpio, &sensor_config, sensor_callback, NULL)) {
+    if (button_create(sensor_gpio, BUTTON_CONFIG(button_active_high), sensor_callback, NULL)) {
         homekit_server_init(&config);
         gpio_write(led_gpio, false);
     }
