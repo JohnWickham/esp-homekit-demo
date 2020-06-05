@@ -59,10 +59,10 @@ void identify_error() {
 homekit_characteristic_t motion_detected  = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, 0);
 
 void sensor_callback(uint8_t gpio) {
-    int new = 1 - gpio_read(sensor_gpio);
-    motion_detected.value = HOMEKIT_BOOL(new);
+    int new = bool(gpio_read(sensor_gpio));
+    motion_detected.value = HOMEKIT_BOOL(!new);
     homekit_characteristic_notify(&motion_detected, motion_detected.value);
-    gpio_write(led_gpio, new);
+    gpio_write(led_gpio, !new);
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Motion Sensor");
@@ -96,7 +96,7 @@ homekit_server_config_t config = {
 
 void on_wifi_ready() {
     gpio_enable(sensor_gpio, GPIO_INPUT);
-    gpio_set_pullup(sensor_gpio, false, false);
+    gpio_set_pullup(sensor_gpio, true, false);
     gpio_set_interrupt(sensor_gpio, GPIO_INTTYPE_EDGE_ANY, sensor_callback);
 
     homekit_server_init(&config);
