@@ -8,7 +8,7 @@
 #include <queue.h>
 #include <string.h>
 
-#include <button.h>
+#include "button.h"
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
 #include <wifi_config.h>
