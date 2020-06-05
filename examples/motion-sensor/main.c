@@ -100,7 +100,7 @@ button_config_t sensor_config = {
 
 void on_wifi_ready() {
 
-    if (button_create(sensor_gpio, sensor_config, sensor_callback, NULL)) {
+    if (button_create(sensor_gpio, &sensor_config, sensor_callback, NULL)) {
         homekit_server_init(&config);
         gpio_write(led_gpio, false);
     }
