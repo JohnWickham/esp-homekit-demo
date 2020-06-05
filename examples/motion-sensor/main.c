@@ -94,9 +94,13 @@ homekit_server_config_t config = {
     .setupId="1QJ8"
 };
 
+button_config_t sensor_config = {
+    .active_level = button_active_high
+}
+
 void on_wifi_ready() {
 
-    if (button_create(sensor_gpio, 0, 4000, sensor_callback, NULL)) {
+    if (button_create(sensor_gpio, sensor_config, sensor_callback, NULL)) {
         homekit_server_init(&config);
         gpio_write(led_gpio, false);
     }
