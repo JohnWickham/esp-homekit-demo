@@ -40,11 +40,16 @@ void identify(homekit_value_t _value) {
 
 homekit_characteristic_t motion_detected  = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, 0);
 
-void motion_sensor_callback(uint8_t gpio) {
-    int new = gpio_read(sensor_gpio);
-    motion_detected.value = HOMEKIT_BOOL(new);
-    homekit_characteristic_notify(&motion_detected, HOMEKIT_BOOL(new));
-    gpio_write(led_gpio, new);
+// void motion_sensor_callback(uint8_t gpio) {
+//     int new = gpio_read(sensor_gpio);
+//     motion_detected.value = HOMEKIT_BOOL(new);
+//     homekit_characteristic_notify(&motion_detected, HOMEKIT_BOOL(new));
+//     gpio_write(led_gpio, new);
+// }
+
+void sensor_callback(bool high, void *context) {
+    motion_detected.value = HOMEKIT_UINT8(high ? 1 : 0);
+    homekit_characteristic_notify(&motion_detected, motion_detected.value);
 }
 
 void gpio_init() {
@@ -54,7 +59,7 @@ void gpio_init() {
     // gpio_enable(sensor_gpio, GPIO_INPUT);
     // gpio_set_pullup(sensor_gpio, false, false);
     // gpio_set_interrupt(sensor_gpio, GPIO_INTTYPE_EDGE_ANY, motion_sensor_callback);
-    if (toggle_create(sensor_gpio, motion_sensor_callback, NULL)) {
+    if (toggle_create(sensor_gpio, sensor_callback, NULL)) {
         identify_task(NULL);
     }
 }
