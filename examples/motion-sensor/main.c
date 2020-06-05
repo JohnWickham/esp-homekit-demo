@@ -33,8 +33,29 @@ void identify_task(void *_args) {
     vTaskDelete(NULL);
 }
 
+void identify_error_task(void *_args) {
+    for (int i=0; i<10; i++) {
+        for (int j=0; j<3; j++) {
+            gpio_write(led_gpio, true);
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+            gpio_write(led_gpio, false);
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+        }
+
+        vTaskDelay(250 / portTICK_PERIOD_MS);
+    }
+
+    gpio_write(led_gpio, false);
+
+    vTaskDelete(NULL);
+}
+
 void identify(homekit_value_t _value) {
     xTaskCreate(identify_task, "Identify", 128, NULL, 2, NULL);
+}
+
+void identify_error() {
+    xTaskCreate(identify_error_task, "Identify Error", 128, NULL, 2, NULL);
 }
 
 homekit_characteristic_t motion_detected  = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, 0);
@@ -77,6 +98,9 @@ void on_wifi_ready() {
     if (toggle_create(sensor_gpio, sensor_callback, NULL)) {
         homekit_server_init(&config);
         gpio_write(led_gpio, false);
+    }
+    else {
+        identify_error();
     }
 }
 
