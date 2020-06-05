@@ -12,7 +12,7 @@
 #include <wifi_config.h>
 
 const int led_gpio = 2;
-const int sensor_gpio = 14;
+const int sensor_gpio = 5;
 
 void identify_task(void *_args) {
     for (int i=0; i<3; i++) {
@@ -96,7 +96,7 @@ homekit_server_config_t config = {
 
 void on_wifi_ready() {
     gpio_enable(sensor_gpio, GPIO_INPUT);
-    gpio_set_pullup(sensor_gpio, true, false);
+    gpio_set_pullup(sensor_gpio, false, false);
     gpio_set_interrupt(sensor_gpio, GPIO_INTTYPE_EDGE_ANY, sensor_callback);
 
     homekit_server_init(&config);
