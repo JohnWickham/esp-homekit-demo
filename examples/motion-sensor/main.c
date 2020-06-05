@@ -60,7 +60,7 @@ void identify_error() {
 
 homekit_characteristic_t motion_detected  = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, 0);
 
-void sensor_callback(bool high, void *context) {
+void sensor_callback(button_event_t event, void *context) {
     motion_detected.value = HOMEKIT_UINT8(high ? 1 : 0);
     homekit_characteristic_notify(&motion_detected, motion_detected.value);
 }
