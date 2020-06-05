@@ -8,7 +8,7 @@
 #include <queue.h>
 #include <string.h>
 
-#include <toggle.h>
+#include <button.h>
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
 #include <wifi_config.h>
@@ -95,7 +95,8 @@ homekit_server_config_t config = {
 };
 
 void on_wifi_ready() {
-    if (toggle_create(sensor_gpio, sensor_callback, NULL)) {
+
+    if (button_create(sensor_gpio, 0, 4000, sensor_callback, NULL)) {
         homekit_server_init(&config);
         gpio_write(led_gpio, false);
     }
