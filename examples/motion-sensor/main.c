@@ -60,9 +60,9 @@ homekit_characteristic_t motion_detected  = HOMEKIT_CHARACTERISTIC_(MOTION_DETEC
 
 void sensor_callback(uint8_t gpio) {
     bool new = gpio_read(sensor_gpio);
-    motion_detected.value = HOMEKIT_BOOL(!new);
+    motion_detected.value = HOMEKIT_BOOL(new);
     homekit_characteristic_notify(&motion_detected, motion_detected.value);
-    gpio_write(led_gpio, !new);
+    gpio_write(led_gpio, new);
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Motion Sensor");
