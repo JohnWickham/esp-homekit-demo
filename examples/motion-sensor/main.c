@@ -95,6 +95,7 @@ homekit_server_config_t config = {
 };
 
 void on_wifi_ready() {
+    gpio_write(led_gpio, false);
     gpio_enable(sensor_gpio, GPIO_INPUT);
     gpio_set_pullup(sensor_gpio, false, false);
     gpio_set_interrupt(sensor_gpio, GPIO_INTTYPE_EDGE_ANY, sensor_callback);
