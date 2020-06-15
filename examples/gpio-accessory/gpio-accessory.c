@@ -55,7 +55,7 @@ homekit_accessory_t *accessories[] = {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
             &name,
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "John Wickham"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20200601"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20200614"),
             HOMEKIT_CHARACTERISTIC(MODEL, "Triumph 1–P"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
@@ -73,8 +73,8 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "127-25-638",
-    .setupId="X0AF"
+    .password = "117-25-638",
+    .setupId = "X0AF"
 };
 
 void create_accessory_name() {
