@@ -73,8 +73,8 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "119-76-178",
-    .setupId = "QLHV"
+    .password = "162-43-322",
+    .setupId = "JF9I"
 };
 
 void create_accessory_name() {
