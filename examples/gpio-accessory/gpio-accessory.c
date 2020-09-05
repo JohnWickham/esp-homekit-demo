@@ -55,7 +55,7 @@ homekit_accessory_t *accessories[] = {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
             &name,
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "John Wickham"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20200826"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20200905"),
             HOMEKIT_CHARACTERISTIC(MODEL, "Mini Christmas Lights"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
@@ -90,6 +90,7 @@ void create_accessory_name() {
 
 void on_wifi_ready() {
     homekit_server_init(&config);
+    gpio_write(onboard_led_gpio, false);
 }
 
 void user_init(void) {
