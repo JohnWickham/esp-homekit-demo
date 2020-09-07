@@ -36,7 +36,7 @@ void accessory_identify_task(void *_args) {
         vTaskDelay(250 / portTICK_PERIOD_MS);
     }
 
-    gpio_write(onboard_led_gpio, accessory_on.value.bool_value);
+    gpio_write(onboard_led_gpio, false);
 
     vTaskDelete(NULL);
 }
@@ -46,7 +46,6 @@ void accessory_identify(homekit_value_t _value) {
 }
 
 void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
-    gpio_write(accessory_gpio, accessory_on.value.bool_value);
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Switch");
