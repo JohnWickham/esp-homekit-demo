@@ -19,8 +19,9 @@ homekit_characteristic_t accessory_on = HOMEKIT_CHARACTERISTIC_(
 );
 
 void accessory_init() {
-    gpio_enable(onboard_led_gpio, GPIO_OUTPUT);
     gpio_enable(accessory_gpio, GPIO_OUTPUT);   
+    gpio_enable(onboard_led_gpio, GPIO_OUTPUT);
+    gpio_write(onboard_led_gpio, false);
 }
 
 void accessory_identify_task(void *_args) {
@@ -90,7 +91,6 @@ void create_accessory_name() {
 
 void on_wifi_ready() {
     homekit_server_init(&config);
-    gpio_write(onboard_led_gpio, false);
 }
 
 void user_init(void) {
