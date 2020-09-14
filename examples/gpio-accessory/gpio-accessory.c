@@ -21,7 +21,7 @@ homekit_characteristic_t accessory_on = HOMEKIT_CHARACTERISTIC_(
 void accessory_init() {
     gpio_enable(accessory_gpio, GPIO_OUTPUT);   
     gpio_enable(onboard_led_gpio, GPIO_OUTPUT);
-    gpio_write(onboard_led_gpio, false);
+    gpio_write(onboard_led_gpio, true);
 }
 
 void accessory_identify_task(void *_args) {
@@ -36,7 +36,7 @@ void accessory_identify_task(void *_args) {
         vTaskDelay(250 / portTICK_PERIOD_MS);
     }
 
-    gpio_write(onboard_led_gpio, false);
+    gpio_write(onboard_led_gpio, true);
 
     vTaskDelete(NULL);
 }
