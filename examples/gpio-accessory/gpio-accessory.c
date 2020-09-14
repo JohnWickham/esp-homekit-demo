@@ -46,6 +46,7 @@ void accessory_identify(homekit_value_t _value) {
 }
 
 void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
+    gpio_write(accessory_gpio, accessory_on.value.bool_value);
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Switch");
@@ -55,7 +56,7 @@ homekit_accessory_t *accessories[] = {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
             &name,
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "John Wickham"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20200905"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20200906"),
             HOMEKIT_CHARACTERISTIC(MODEL, "Mini Christmas Lights"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
