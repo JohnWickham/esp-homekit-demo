@@ -56,13 +56,13 @@ void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, vo
         for (int dutyCycle = 0; dutyCycle < 1023; dutyCycle++){   
             analogWrite(ledPin, dutyCycle);
         }
-        digitalWrite(accessory_gpio, true);
+        gpio_write(accessory_gpio, true);
     }
     else {
         for(int dutyCycle = 1023; dutyCycle > 0; dutyCycle--){
             analogWrite(accessory_gpio, dutyCycle);
         }
-        digitalWrite(accessory_gpio, false);
+        gpio_write(accessory_gpio, false);
     }
 }
 
