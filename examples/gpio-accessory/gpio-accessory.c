@@ -10,6 +10,9 @@
 #include <homekit/characteristics.h>
 #include <wifi_config.h>
 
+const char* setup_code = "297-17-298";
+const char* setup_id = "JP62";
+
 const int accessory_gpio = 4;
 const int onboard_led_gpio = 2;
 
@@ -46,7 +49,21 @@ void accessory_identify(homekit_value_t _value) {
 }
 
 void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
-    gpio_write(accessory_gpio, accessory_on.value.bool_value);
+    // gpio_write(accessory_gpio, accessory_on.value.bool_value);
+    
+    /* The following lines perform PWM fading. This is only suitable for accessories that can tolerate high switching frequency (e.g. LEDs). */
+    if (accessory_on.value.bool_value) {
+        for (int dutyCycle = 0; dutyCycle < 1023; dutyCycle++){   
+            analogWrite(ledPin, dutyCycle);
+        }
+        digitalWrite(accessory_gpio, true);
+    }
+    else {
+        for(int dutyCycle = 1023; dutyCycle > 0; dutyCycle--){
+            analogWrite(accessory_gpio, dutyCycle);
+        }
+        digitalWrite(accessory_gpio, false);
+    }
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Light");
@@ -56,14 +73,14 @@ homekit_accessory_t *accessories[] = {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
             &name,
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "John Wickham"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20201127"),
-            HOMEKIT_CHARACTERISTIC(MODEL, "Lantern"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20201128"),
+            HOMEKIT_CHARACTERISTIC(MODEL, "Accent Lights"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
         HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]){
-            HOMEKIT_CHARACTERISTIC(NAME, "Lantern"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Accent Lights"),
             &accessory_on,
             NULL
         }),
@@ -74,8 +91,8 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "268-12-328",
-    .setupId = "S05A"
+    .password = setup_code,
+    .setupId = setup_id
 };
 
 void create_accessory_name() {
