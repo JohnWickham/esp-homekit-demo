@@ -93,11 +93,11 @@ void led_string_set(void) {
         //printf("r=%d,g=%d,b=%d,w=%d\n", rgbw.red, rgbw.green, rgbw.blue, rgbw.white);
 
         // set the inbuilt led
-        gpio_write(LED_INBUILT_GPIO, LED_ON);
+//        gpio_write(LED_INBUILT_GPIO, LED_ON);
     }
     else {
         // printf("off\n");
-        gpio_write(LED_INBUILT_GPIO, 1 - LED_ON);
+//        gpio_write(LED_INBUILT_GPIO, 1 - LED_ON);
     }
 
     // write out the new color 
@@ -109,7 +109,7 @@ void led_init() {
     gpio_enable(LED_INBUILT_GPIO, GPIO_OUTPUT);
 
     // initialise the LED strip
-    ws2812_i2s_init(LED_COUNT, PIXEL_RGB);
+    ws2812_i2s_init(LED_COUNT, PIXEL_RGB);// PIXEL_RGB
 
     // set the initial state
     led_string_set();
@@ -192,21 +192,21 @@ void led_saturation_set(homekit_value_t value) {
     led_string_set();
 }
 
-homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Color LED Bulb");
+homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Bottle Lights");
 
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id = 1, .category = homekit_accessory_category_lightbulb, .services = (homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics = (homekit_characteristic_t*[]) {
             &name,
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "John Wickham"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20200604"),
-            HOMEKIT_CHARACTERISTIC(MODEL, "Color LED Bulb"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20201029"),
+            HOMEKIT_CHARACTERISTIC(MODEL, "Bottle Lights"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, led_identify),
             NULL
         }),
         HOMEKIT_SERVICE(LIGHTBULB, .primary = true, .characteristics = (homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Color LED Bulb"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Lights"),
             HOMEKIT_CHARACTERISTIC(
                 ON, true,
                 .getter = led_on_get,
@@ -236,8 +236,8 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "481-51-623",
-    .setupId = "6PB5"
+    .password = "198-25-824",
+    .setupId = "CGW9"
 };
 
 void create_accessory_name() {
@@ -251,11 +251,12 @@ void create_accessory_name() {
 
 void on_wifi_ready() {
     homekit_server_init(&config);
+    gpio_write(LED_INBUILT_GPIO, 1);
 }
 
 void user_init(void) {
     uart_set_baud(0, 115200);
     led_init();
     create_accessory_name();
-    wifi_config_init("Color LED Bulb Setup", NULL, on_wifi_ready);
+    wifi_config_init("Accessory Setup", NULL, on_wifi_ready);
 }
