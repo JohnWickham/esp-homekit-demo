@@ -5,7 +5,7 @@
 #include <esp8266.h>
 #include <FreeRTOS.h>
 #include <task.h>
-#include "pwm.h"
+//#include "pwm.h"
 
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
@@ -51,6 +51,7 @@ void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, vo
     
     /* The following lines perform PWM fading. This is only suitable for accessories that can tolerate high switching frequency (e.g. LEDs). */
     
+    /*
     if (accessory_on.value.bool_value) {
         pwm_set_duty(0);
         pwm_start();
@@ -65,6 +66,7 @@ void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, vo
         pwm_set_duty(0);
         pwm_stop();
     }
+    */
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Light");
