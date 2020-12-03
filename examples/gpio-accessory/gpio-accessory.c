@@ -10,8 +10,8 @@
 #include <homekit/characteristics.h>
 #include <wifi_config.h>
 
-const char* setup_code = "297-17-298";
-const char* setup_id = "JP62";
+const char* setup_code = "427-95-821";
+const char* setup_id = "OSB5";
 
 const int accessory_gpio = 4;
 const int onboard_led_gpio = 2;
