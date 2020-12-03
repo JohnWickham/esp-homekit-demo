@@ -167,7 +167,7 @@ homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Sonoff Dimmer");
 
 homekit_characteristic_t lightbulb_on = HOMEKIT_CHARACTERISTIC_(ON, false, .getter=light_on_get, .setter=light_on_set);
 
-
+/*
 void button_callback(uint8_t gpio, button_event_t event) {
     switch (event) {
         case button_event_single_press:
@@ -185,8 +185,9 @@ void button_callback(uint8_t gpio, button_event_t event) {
             printf("Unknown button event: %d\n", event);
     }
 }
+*/
 
-
+/*
 void toggle_callback(uint8_t gpio) {
     printf("Toggling lightbulb due to switch at GPIO %2d\n", gpio);
     lightbulb_on.value.bool_value = !lightbulb_on.value.bool_value;
@@ -194,7 +195,7 @@ void toggle_callback(uint8_t gpio) {
     lightSET();
     homekit_characteristic_notify(&lightbulb_on, lightbulb_on.value);
 }
-
+*/
 
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(
