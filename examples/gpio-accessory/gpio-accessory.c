@@ -10,9 +10,6 @@
 #include <homekit/characteristics.h>
 #include <wifi_config.h>
 
-const char* setup_code = "427-95-821";
-const char* setup_id = "OSB5";
-
 const int accessory_gpio = 4;
 const int onboard_led_gpio = 2;
 
@@ -91,8 +88,8 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = setup_code,
-    .setupId = setup_id
+    .password = "427-95-821",
+    .setupId = "OSB5"
 };
 
 void create_accessory_name() {
