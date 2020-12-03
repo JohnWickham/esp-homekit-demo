@@ -17,25 +17,16 @@
 //#include "button.h"
 //#include "toggle.h"
 
-// The GPIO pin that is connected to the relay on the Sonoff Basic.
-// const int relay_gpio = 12;
 // The GPIO pin that is connected to the LED on the Sonoff Basic.
 const int led_gpio = 2;
-// The GPIO pin that is connected to the button on the Sonoff Basic.
-// const int button_gpio = 0;
-// The GPIO pin that is connected to the header on the Sonoff Basic (external switch).
-// const int toggle_gpio = 14;
 
 #include <pwm.h>
 // The PWM pin that is connected to the PWM daughter board.
 const int pwm_gpio = 4;
 
-const bool dev = true;
-
 float bri;
 bool on;
 uint8_t pins[1];
-//void toggle_callback(uint8_t gpio);  // as this needed
 
 void led_write(bool on) {
     gpio_write(led_gpio, on ? 0 : 1);
@@ -256,22 +247,15 @@ void create_accessory_name() {
 
 
 void user_init(void) {
+
     uart_set_baud(0, 115200);
     create_accessory_name();
-
-/*
-    wifi_init();                                                   //testing
-    homekit_server_init(&config);                                  //testing
- */
+    
+    //homekit_server_init(&config);                                  //testing
+    
     wifi_config_init("Sonoff Dimmer", NULL, on_wifi_ready);        //release
     
     gpio_init();
     light_init();
 
-    if (button_create(button_gpio, 0, 4000, button_callback)) {
-        printf("Failed to initialize button\n");
-    }
-    if (toggle_create(toggle_gpio, toggle_callback)) {
-        printf("Failed to initialize toggle\n");
-    }
 }
