@@ -58,6 +58,7 @@ void reset_configuration() {
 }
 
 
+/*
 static void wifi_init() {
     struct sdk_station_config wifi_config = {
         .ssid = WIFI_SSID,
@@ -67,6 +68,7 @@ static void wifi_init() {
     sdk_wifi_station_set_config(&wifi_config);
     sdk_wifi_station_connect();
 }
+*/
 
 
 void gpio_init() {
