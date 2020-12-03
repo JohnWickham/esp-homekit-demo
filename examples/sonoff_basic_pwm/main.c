@@ -12,7 +12,7 @@
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
 #include <wifi_config.h>
-#include "wifi.h"
+//#include "wifi.h"
 
 //#include "button.h"
 //#include "toggle.h"
