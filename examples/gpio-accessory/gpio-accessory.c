@@ -46,21 +46,7 @@ void accessory_identify(homekit_value_t _value) {
 }
 
 void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
-    // gpio_write(accessory_gpio, accessory_on.value.bool_value);
-    
-    /* The following lines perform PWM fading. This is only suitable for accessories that can tolerate high switching frequency (e.g. LEDs). */
-    if (accessory_on.value.bool_value) {
-        for (int dutyCycle = 0; dutyCycle < 1023; dutyCycle++){   
-            analogWrite(accessory_gpio, dutyCycle);
-        }
-        gpio_write(accessory_gpio, true);
-    }
-    else {
-        for(int dutyCycle = 1023; dutyCycle > 0; dutyCycle--){
-            analogWrite(accessory_gpio, dutyCycle);
-        }
-        gpio_write(accessory_gpio, false);
-    }
+    gpio_write(accessory_gpio, accessory_on.value.bool_value);
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Light");
