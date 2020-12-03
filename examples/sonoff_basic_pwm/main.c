@@ -1,26 +1,4 @@
-/*
- * Example of using esp-homekit library to control
- * a simple $5 Sonoff Basic using HomeKit.
- * The esp-wifi-config library is also used in this
- * example. This means you don't have to specify
- * your network's SSID and password before building.
- *
- * In order to flash the sonoff basic you will have to
- * have a 3,3v (logic level) FTDI adapter.
- *
- * To flash this example connect 3,3v, TX, RX, GND
- * in this order, beginning in the (square) pin header
- * next to the button.
- * Next hold down the button and connect the FTDI adapter
- * to your computer. The sonoff is now in flash mode and
- * you can flash the custom firmware.
- *
- * WARNING: Do not connect the sonoff to AC while it's
- * connected to the FTDI adapter! This may fry your
- * computer and sonoff.
- *
-modified to do pulse-width-modulation (PWM) of LED
- */
+/* This was intended to work with a Sonoff basic */
 
 #include <stdio.h>
 #include <espressif/esp_wifi.h>
@@ -36,21 +14,21 @@ modified to do pulse-width-modulation (PWM) of LED
 #include <wifi_config.h>
 #include "wifi.h"
 
-#include "button.h"
-#include "toggle.h"
+//#include "button.h"
+//#include "toggle.h"
 
 // The GPIO pin that is connected to the relay on the Sonoff Basic.
-const int relay_gpio = 12;
+// const int relay_gpio = 12;
 // The GPIO pin that is connected to the LED on the Sonoff Basic.
-const int led_gpio = 13;
+const int led_gpio = 2;
 // The GPIO pin that is connected to the button on the Sonoff Basic.
-const int button_gpio = 0;
+// const int button_gpio = 0;
 // The GPIO pin that is connected to the header on the Sonoff Basic (external switch).
-const int toggle_gpio = 14;
+// const int toggle_gpio = 14;
 
 #include <pwm.h>
 // The PWM pin that is connected to the PWM daughter board.
-const int pwm_gpio = 13;
+const int pwm_gpio = 4;
 
 const bool dev = true;
 
@@ -62,7 +40,6 @@ uint8_t pins[1];
 void led_write(bool on) {
     gpio_write(led_gpio, on ? 0 : 1);
 }
-
 
 void reset_configuration_task() {
     //Flash the LED first before we start the reset
@@ -102,8 +79,6 @@ static void wifi_init() {
 
 
 void gpio_init() {
-//    gpio_enable(relay_gpio, GPIO_OUTPUT);
-    gpio_enable(toggle_gpio, GPIO_INPUT);
     pins[0] = led_gpio;
     pwm_init(1, pins, false);
 }
