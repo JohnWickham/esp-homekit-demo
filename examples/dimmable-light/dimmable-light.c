@@ -5,7 +5,6 @@
 #include <esp8266.h>
 #include <FreeRTOS.h>
 #include <task.h>
-//#include "pwm.h"
 
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
@@ -20,10 +19,9 @@ homekit_characteristic_t accessory_on = HOMEKIT_CHARACTERISTIC_(
 );
 
 void accessory_init() {
+    gpio_enable(accessory_gpio, GPIO_OUTPUT);   
     gpio_enable(onboard_led_gpio, GPIO_OUTPUT);
     gpio_write(onboard_led_gpio, true);
-    
-    pwm_init(1, accessory_gpio, false);
 }
 
 void accessory_identify_task(void *_args) {
@@ -48,25 +46,7 @@ void accessory_identify(homekit_value_t _value) {
 }
 
 void accessory_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
-    
-    /* The following lines perform PWM fading. This is only suitable for accessories that can tolerate high switching frequency (e.g. LEDs). */
-    
-    /*
-    if (accessory_on.value.bool_value) {
-        pwm_set_duty(0);
-        pwm_start();
-        for (int dutyCycle = 0; dutyCycle < 1023; dutyCycle++) {   
-            pwm_set_duty(dutyCycle);
-        }
-    }
-    else {
-        for (int dutyCycle = 1023; dutyCycle > 0; dutyCycle--) {
-            pwm_set_duty(dutyCycle);
-        }
-        pwm_set_duty(0);
-        pwm_stop();
-    }
-    */
+    gpio_write(accessory_gpio, accessory_on.value.bool_value);
 }
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Light");
@@ -94,8 +74,8 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "297-17-298",
-    .setupId = "JP62"
+    .password = "395-63-376",
+    .setupId = "S1YZ"
 };
 
 void create_accessory_name() {

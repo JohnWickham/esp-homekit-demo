@@ -3,7 +3,6 @@ PROGRAM = dimmable-light
 EXTRA_COMPONENTS = \
 	extras/http-parser \
 	extras/dhcpserver \
-	extras/pwm \
 	$(abspath ../../components/esp8266-open-rtos/wifi_config) \
 	$(abspath ../../components/esp8266-open-rtos/cJSON) \
 	$(abspath ../../components/common/wolfssl) \
