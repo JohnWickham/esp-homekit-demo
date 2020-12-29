@@ -192,15 +192,15 @@ void led_saturation_set(homekit_value_t value) {
     led_string_set();
 }
 
-homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Bottle Lights");
+homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Accent Light");
 
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id = 1, .category = homekit_accessory_category_lightbulb, .services = (homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics = (homekit_characteristic_t*[]) {
             &name,
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "John Wickham"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20201029"),
-            HOMEKIT_CHARACTERISTIC(MODEL, "Bottle Lights"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "20201229"),
+            HOMEKIT_CHARACTERISTIC(MODEL, "Accent Light"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, led_identify),
             NULL
@@ -236,16 +236,16 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "198-25-824",
-    .setupId = "CGW9"
+    .password = "427-95-821",
+    .setupId = "OSB5"
 };
 
 void create_accessory_name() {
     uint8_t macaddr[6];
     sdk_wifi_get_macaddr(STATION_IF, macaddr);
-    int name_len = snprintf(NULL, 0, "Color LED Bulb %02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
+    int name_len = snprintf(NULL, 0, "Accent Light %02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
     char *name_value = malloc(name_len + 1);
-    snprintf(name_value, name_len + 1, "Color LED Bulb %02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
+    snprintf(name_value, name_len + 1, "Accent Light %02X%02X%02X", macaddr[3], macaddr[4], macaddr[5]);
     name.value = HOMEKIT_STRING(name_value);
 }
 
